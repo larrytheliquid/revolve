@@ -13,7 +13,7 @@ module Revolve
       @population[0] = @program
     end
     
-    it "should be the fitness_cases applied to the program, applied to the fitness_combinator" do
+    it "should be the fitness_cases mapped to the program, applied to the fitness_combinator" do
       @population.fitness(@program).should == 2
     end
     
