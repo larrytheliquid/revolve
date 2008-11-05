@@ -3,7 +3,11 @@ module Revolve
     attr_accessor :stack
     def initialize(*args)
       @stack = []
-      super args.to_ary
+      block_given? ? super(*args) : super(args)
+    end
+    
+    def self.randomized(length, instructions)
+      self.new(length) { instructions[ rand(instructions.size) ] }
     end
     
     def run
