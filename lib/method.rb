@@ -9,5 +9,12 @@ module Revolve
       return false unless stack
       stack.first.respond_to?(name) && (stack.size - 1 >= stack.first.method(name).arity)
     end
+    
+    def call!
+      target = stack.pop
+      arguments = [name]
+      target.method(name).arity.times { arguments.push(stack.pop) }
+      stack.push( target.send(*arguments) ).last
+    end
   end
 end
