@@ -13,8 +13,8 @@ describe Program, "#crossover" do
     @child.should be_kind_of(Program)
   end
   
-  it "should be of length no greater than the sum of the parents - 2" do
-    @child.length.should_not > 8
+  it "should be of length no greater than the sum of the parents" do
+    @child.length.should_not > 10
   end
   
   it "should only contain instructions from either parent" do

@@ -22,7 +22,27 @@ module Revolve
     end
     
     def crossover(mate)
-      self.class.new *(self.slice( 0, rand(self.size) ) + mate.slice( -rand(mate.size), mate.size ))
+      [self, mate].inject {|x, y| x.random_slice + y.random_slice }
+    end
+    
+    def mutate(mutation)
+      random_slice + mutation
+    end
+    
+    def +(program)
+      self.class.new *(self.concat(program))
+    end
+    
+    def random_slice
+      rand(2) == 1 ? self.slice_left : self.slice_right
+    end
+    
+    def slice_left
+      self.slice( 0, rand(self.size) )
+    end
+    
+    def slice_right
+      self.slice( -rand(self.size), self.size )
     end
   end
 end
