@@ -8,7 +8,7 @@ module Revolve
     
     def self.randomized(length, instructions)
       self.new(length) { instructions[ rand(instructions.size) ] }
-    end
+    end        
     
     def run
       self.each do |intruction|
@@ -19,6 +19,10 @@ module Revolve
         end
       end
       stack.last
+    end
+    
+    def crossover(mate)
+      self.class.new *(self.slice( 0, rand(self.size) ) + mate.slice( -rand(mate.size), mate.size ))
     end
   end
 end
