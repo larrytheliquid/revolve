@@ -23,6 +23,10 @@ module Revolve
       result
     end
     
+    def reproduce
+      self.dup
+    end
+    
     def crossover(mate)
       [self, mate].inject {|x, y| x.random_slice + y.random_slice }
     end
