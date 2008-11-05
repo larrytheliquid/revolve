@@ -7,11 +7,12 @@ module Revolve
       block_given? ? super(*args) : super(args)
     end
     
-    attr_accessor :program_size, :instructions
+    attr_accessor :max_generations, :program_size, :instructions
     attr_accessor :fitness_cases, :fitness_combinator
     attr_accessor :reproduction_chance, :crossover_chance, :mutation_chance
     def self.initialized(size, parameters)
-      population = self.new(size) { Program.randomized(parameters[:program_size], parameters[:instructions])}
+      population = self.new(size) { Program.randomized(parameters[:program_size], parameters[:instructions]) }
+      population.max_generations = parameters[:max_generations]
       population.program_size = parameters[:program_size]
       population.instructions = parameters[:instructions]
       population.fitness_cases = parameters[:fitness_cases]
@@ -20,6 +21,11 @@ module Revolve
       population.crossover_chance = parameters[:crossover_chance]
       population.mutation_chance = parameters[:mutation_chance]                  
       population
+    end
+    
+    def evolve_generation!
+      @generation += 1
+      self.map!{|program| program }
     end
     
     def select_program

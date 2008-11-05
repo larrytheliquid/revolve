@@ -11,7 +11,6 @@ module Revolve
     end        
     
     def run
-      return stack.last unless stack.empty?
       self.each do |intruction|
         if intruction.is_a?(Revolve::Method) && intruction.stack = stack          
           intruction.call! if intruction.callable?
@@ -19,7 +18,9 @@ module Revolve
           stack.push intruction
         end
       end
-      stack.last
+      result = stack.last
+      stack.clear
+      result
     end
     
     def crossover(mate)

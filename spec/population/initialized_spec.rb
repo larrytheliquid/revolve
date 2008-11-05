@@ -4,7 +4,8 @@ module Revolve
   
 describe Population, ".initialized" do
   before do
-    @population = new_population(:size => 3, :program_size => 10, :reproduction_chance => 0.15,
+    @population = new_population(:size => 3, :max_generations => 20, 
+                                 :program_size => 10, :reproduction_chance => 0.15,
                                  :crossover_chance => 0.8, :mutation_chance => 0.05)
   end
   
@@ -14,6 +15,10 @@ describe Population, ".initialized" do
   
   it "should be of specified size" do
     @population.size.should == 3
+  end
+  
+  it "should have a max_generations" do
+    @population.max_generations.should == 20
   end
   
   it "should have a program_size" do
