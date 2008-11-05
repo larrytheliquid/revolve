@@ -5,8 +5,8 @@ module Revolve
 describe Population, ".initialized" do
   before do
     @population = new_population(:size => 3, :max_generations => 20, 
-                                 :program_size => 10, :reproduction_chance => 0.15,
-                                 :crossover_chance => 0.8, :mutation_chance => 0.05)
+                                 :program_size => 10, :crossover_chance => 0.8, 
+                                 :mutation_chance => 0.05)
   end
   
   it "should be generation 0" do
@@ -23,10 +23,6 @@ describe Population, ".initialized" do
   
   it "should have a program_size" do
     @population.program_size.should == 10
-  end
-  
-  it "should have a reproduction_chance" do
-    @population.reproduction_chance.should == 0.15
   end
   
   it "should have a crossover_chance" do

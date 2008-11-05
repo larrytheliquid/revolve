@@ -8,15 +8,14 @@ module Revolve
     
     attr_accessor :max_generations, :program_size, :instructions
     attr_accessor :fitness_cases, :fitness_combinator
-    attr_accessor :reproduction_chance, :crossover_chance, :mutation_chance
+    attr_accessor :crossover_chance, :mutation_chance
     def self.initialized(size, parameters)
-      population = self.new(size) { Program.randomized(parameters[:program_size], parameters[:instructions]) }
+      population = self.new(size) { Program.randomized(rand(parameters[:program_size].next), parameters[:instructions]) }
       population.max_generations = parameters[:max_generations]
       population.program_size = parameters[:program_size]
       population.instructions = parameters[:instructions]
       population.fitness_cases = parameters[:fitness_cases]
       population.fitness_combinator = parameters[:fitness_combinator] 
-      population.reproduction_chance = parameters[:reproduction_chance]
       population.crossover_chance = parameters[:crossover_chance]
       population.mutation_chance = parameters[:mutation_chance]                  
       population
@@ -24,7 +23,19 @@ module Revolve
     
     def evolve_generation!
       @generation += 1
-      self.map!{|program| program }
+      number_of_crossovers = (self.size * crossover_chance).to_i      
+      number_of_mutations = (self.size * mutation_chance).to_i
+      self.map! do |ignore| 
+        if number_of_crossovers > 0
+          number_of_crossovers -= 1
+          select_program.crossover(select_program)
+        elsif number_of_mutations > 0
+          number_of_mutations -= 1
+          select_program.mutate(Program.randomized(rand(program_size.next), instructions))
+        else
+          select_program.reproduce
+        end
+      end
     end
     
     def select_program
