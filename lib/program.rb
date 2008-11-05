@@ -11,6 +11,7 @@ module Revolve
     end        
     
     def run
+      return stack.last unless stack.empty?
       self.each do |intruction|
         if intruction.is_a?(Revolve::Method) && intruction.stack = stack          
           intruction.call! if intruction.callable?
