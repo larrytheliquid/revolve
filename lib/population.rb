@@ -22,6 +22,15 @@ module Revolve
       population
     end
     
+    def select_program
+      first_program, second_program = random_program, random_program
+      fitness(first_program) <= fitness(second_program) ? first_program : second_program
+    end
+    
+    def random_program
+      self[self.size - 1]
+    end
+    
     def fitness(program)
       return @fitness_memory[program] if @fitness_memory.has_key?(program)
       @fitness_memory[program] = fitness_combinator.call(
