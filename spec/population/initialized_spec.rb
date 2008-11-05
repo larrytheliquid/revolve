@@ -4,12 +4,8 @@ module Revolve
   
 describe Population, ".initialized" do
   before do
-    @population = Population.initialized(3, 
-    :instructions => ["kitteh", 2, 8, Method.new(:+)], 
-    :program_size => 10,
-    :reproduction_chance => 0.15,
-    :crossover_chance => 0.8,
-    :mutation_chance => 0.05)
+    @population = new_population(:size => 3, :program_size => 10, :reproduction_chance => 0.15,
+                                 :crossover_chance => 0.8, :mutation_chance => 0.05)
   end
   
   it "should be generation 0" do
