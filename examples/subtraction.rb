@@ -16,6 +16,7 @@ def cases(num, step, first, second)
   end
 end
 
+# x - y
 population = Revolve::Population.initialized( 200, {  
   :program_size => 10,
   :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,

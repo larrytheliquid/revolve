@@ -6,7 +6,16 @@ class Integer
   end
 end
 
-# x
+def cases(num, value)
+  (1..num).map do |i|
+    lambda do |program|
+      value = value*i
+      program.run( Revolve::Argument.new(:x, value)).to_i - (value + 10)
+    end
+  end
+end
+
+# x * 10
 population = Revolve::Population.initialized( 200, {  
   :program_size => 10,
   :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,
@@ -14,11 +23,8 @@ population = Revolve::Population.initialized( 200, {
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
                      Revolve::Variable.new(:x) ],
   :max_generations => 500,                    
-  :fitness_cases => [ lambda{|program| program.run( Revolve::Argument.new(:x, 13) ).to_i == 13 },
-                      lambda{|program| program.run( Revolve::Argument.new(:x, 21) ).to_i == 21 },
-                      lambda{|program| program.run( Revolve::Argument.new(:x, 34) ).to_i == 34 },
-                      lambda{|program| program.run( Revolve::Argument.new(:x, 55) ).to_i == 55 } ],
-  :fitness_combinator => lambda{|cases| cases.inject{|x, y| x && y } ? 0 : 12345 },
+  :fitness_cases => cases(20, 18),
+  :fitness_combinator => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
   :crossover_percent => 0.6,
   :mutation_percent => 0.3
 })
@@ -28,6 +34,6 @@ population.evolve!
 puts "Generations: #{population.generation}"
 puts "Fitness: #{population.fitness(population.fittest_program)}"
 puts "Program:\n#{population.fittest_program.inspect}"
-input = Revolve::Argument.new(:x, 34)
+input = Revolve::Argument.new(:x, 28)
 puts "Input: #{input}"
 puts "Output: #{population.fittest_program.run(input)}"

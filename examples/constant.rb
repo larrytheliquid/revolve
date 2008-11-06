@@ -6,6 +6,7 @@ class Integer
   end
 end
 
+# 120
 population = Revolve::Population.initialized( 200, {  
   :program_size => 10,
   :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,
