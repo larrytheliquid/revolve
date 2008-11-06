@@ -10,10 +10,12 @@ module Revolve
       self.new(length) { instructions[ rand(instructions.size) ] }
     end        
     
-    def run
+    def run(*arguments)
       self.each do |intruction|
         if intruction.is_a?(Revolve::Method) && intruction.stack = stack          
           intruction.call! if intruction.callable?
+        elsif intruction.is_a?(Revolve::Variable)
+          stack.push arguments.detect{|argument| argument.name == intruction.name }.value
         else
           stack.push intruction
         end

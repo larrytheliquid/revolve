@@ -15,6 +15,19 @@ describe Program, "#run" do
       @program.stack.should be_empty
     end
   end
+  
+  describe "with variables" do
+    before { @program = Program.new(Variable.new(:x)) }
+
+    it "should return the variable value on top of the stack" do
+      @program.run(Argument.new(:x, 1337)).should == 1337
+    end
+    
+    it "should empty the stack" do
+      @program.run(Argument.new(:x, 1337))
+      @program.stack.should be_empty
+    end
+  end
 
   describe "with methods that are not callable" do
     before { @program = Program.new( 3, Method.new(:+) ) }
