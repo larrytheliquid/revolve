@@ -2,11 +2,12 @@ require File.join(File.dirname(__FILE__), "..", "spec_helper")
 
 module Revolve
   
-describe Population, "#evolve_generation!" do
+describe Population, "#evolve!" do
   before do
     @fitness_combinator = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
     @population = new_population(
       :size => 0,
+      :max_generations => 5,
       :instructions => [2, 3, 5, 8, 1337, 
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
@@ -21,38 +22,22 @@ describe Population, "#evolve_generation!" do
     @original_population = @population.clone    
   end
   
-  it "should increment the generation" do
-    @population.evolve_generation!
-    @population.generation.should == 1
+  it "should return a program" do
+    @population.evolve!.should be_kind_of(Program)
+  end
+  
+  it "should not evolve past max_generations" do
+    @population.evolve!
+    @population.generation.should_not > 10
   end
   
   it "should be the same size as it was originally" do
-    @population.evolve_generation!
+    @population.evolve!
     @population.size.should == @original_population.size
   end
   
-  it "should use selection when selecting programs for next generation" do
-    @population.expects(:select_program).times(6).returns(@program_1)
-    @population.evolve_generation!
-  end
-  
-  it "should crossover according to the crossover_chance" do
-    Program.any_instance.expects(:crossover).times(2).returns(@program_1.dup)
-    @population.evolve_generation!
-  end
-  
-  it "should mutate according to the mutation_chance" do
-    Program.any_instance.expects(:mutate).times(1).returns(@program_1.dup)
-    @population.evolve_generation!
-  end
-  
-  it "should reproduce according to the the remaining percentage" do
-    Program.any_instance.expects(:reproduce).times(1).returns(@program_1.dup)
-    @population.evolve_generation!
-  end
-  
   it "should not be a different population" do
-    @population.evolve_generation!
+    @population.evolve!
     @population.should_not == @original_population
   end
 end

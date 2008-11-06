@@ -21,16 +21,21 @@ module Revolve
       population
     end
     
+    def evolve!
+      max_generations.times do
+        evolve_generation!
+      end
+      self.max{|x, y| fitness(x) <=> fitness(y) }
+    end
+    
     def evolve_generation!
       @generation += 1
       number_of_crossovers = (self.size * crossover_chance).to_i      
       number_of_mutations = (self.size * mutation_chance).to_i
       self.map! do |ignore| 
-        if number_of_crossovers > 0
-          number_of_crossovers -= 1
+        if number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)
-        elsif number_of_mutations > 0
-          number_of_mutations -= 1
+        elsif number_of_mutations > 0 && number_of_mutations -= 1          
           select_program.mutate(Program.randomized(rand(program_size.next), instructions))
         else
           select_program.reproduce

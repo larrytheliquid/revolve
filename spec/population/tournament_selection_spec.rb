@@ -6,13 +6,13 @@ module Revolve
     before do
       @fitness_combinator = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
       @population = new_population(
-        :size => 1,
+        :size => 0,
         :fitness_cases => [ lambda{|program| program.run - 12 } ],
         :fitness_combinator => @fitness_combinator)
       @more_fit_program = Program.new(2, 8, Revolve::Method.new(:+))
       @some_program = Program.new(1336, Revolve::Method.new(:next))
       @less_fit_program = Program.new(2, 3, Revolve::Method.new(:+))
-      @population.clear.push(@more_fit_program).push(@some_program).push(@less_fit_program)
+      @population.push(@more_fit_program).push(@some_program).push(@less_fit_program)
     end
     
     it "should return a Program" do
