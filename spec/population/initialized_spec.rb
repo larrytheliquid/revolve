@@ -31,7 +31,7 @@ describe Population, ".initialized" do
   
   it "should have a mutation_chance" do
     @population.mutation_chance.should == 0.05
-  end
+  end    
 end
   
 end

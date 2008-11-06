@@ -28,7 +28,7 @@ describe Population, "#evolve!" do
   
   it "should not evolve past max_generations" do
     @population.evolve!
-    @population.generation.should_not > 10
+    @population.generation.should_not > 5
   end
   
   it "should be the same size as it was originally" do

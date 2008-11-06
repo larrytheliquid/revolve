@@ -1,6 +1,6 @@
 module Revolve
   class Population < Array
-    attr_reader :generation
+    attr_accessor :generation, :fittest_program
     def initialize(*args)
       @generation = 0
       block_given? ? super(*args) : super(args)
@@ -22,10 +22,12 @@ module Revolve
     end
     
     def evolve!
-      max_generations.times do
-        evolve_generation!
-      end
-      self.max{|x, y| fitness(x) <=> fitness(y) }
+      update_fittest_program!
+      max_generations.times do        
+        evolve_generation!    
+        update_fittest_program!
+      end      
+      fittest_program
     end
     
     def evolve_generation!
@@ -43,6 +45,15 @@ module Revolve
       end
     end
     
+    def update_fittest_program!
+      generations_fittest_program = self.min{|x, y| fitness(x) <=> fitness(y) }
+      @fittest_program = if fittest_program        
+        fitness(generations_fittest_program) < fitness(fittest_program) ? generations_fittest_program : fittest_program
+      else
+        generations_fittest_program
+      end
+    end
+    
     def select_program
       first_program, second_program = random_program, random_program
       fitness(first_program) <= fitness(second_program) ? first_program : second_program
@@ -50,7 +61,7 @@ module Revolve
     
     def random_program
       self[self.size - 1]
-    end
+    end        
     
     def fitness(program)
       fitness_combinator.call( fitness_cases.map{|fitness_case| fitness_case.call(program) } )
