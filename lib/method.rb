@@ -16,5 +16,9 @@ module Revolve
       target.method(name).arity.times { arguments.push(stack.pop) }
       stack.push( target.send(*arguments) ).last
     end
+    
+    def inspect
+      "(:#{name} method)"
+    end
   end
 end

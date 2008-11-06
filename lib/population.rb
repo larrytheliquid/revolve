@@ -23,9 +23,10 @@ module Revolve
     
     def evolve!
       update_fittest_program!
-      max_generations.times do        
+      max_generations.times do 
+        break if fitness(fittest_program) == 0       
         evolve_generation!    
-        update_fittest_program!
+        update_fittest_program!        
       end      
       fittest_program
     end
