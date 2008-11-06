@@ -9,9 +9,9 @@ end
 def cases(num, step, first, second)
   (1..num).map do |i|
     lambda do |program|
-      first = first + step*i
-      program.run( Revolve::Argument.new(:x, first), 
-                   Revolve::Argument.new(:y, second)).to_i - (first - second)
+      my_first = first + step*i
+      program.run( Revolve::Argument.new(:x, my_first), 
+                   Revolve::Argument.new(:y, second)).to_i - (my_first - second)
     end
   end
 end
@@ -24,7 +24,7 @@ population = Revolve::Population.initialized( 200, {
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
                      Revolve::Variable.new(:x), Revolve::Variable.new(:y) ],
   :max_generations => 500,                    
-  :fitness_cases => cases(20, 6, 10, 34),
+  :fitness_cases => cases(10, 6, 10, 34),
   :fitness_combinator => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
   :crossover_percent => 0.6,
   :mutation_percent => 0.3

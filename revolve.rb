@@ -6,7 +6,8 @@ require File.join(File.dirname(__FILE__), "lib", "method")
 require File.join(File.dirname(__FILE__), "lib", "program")
 require File.join(File.dirname(__FILE__), "lib", "population")
 
-# TODO: Examples: (x^2), ((x+1)^3), (sin(x) [-pi/4, pi/4] [-pi/2, pi/2])
+# TODO: Test against a separate test case set to ensure generalization
+# TODO: describe/it syntax that can save programs to use if already evolved
 # TODO: Make fitness case a class instead of passing lambdas?
 # TODO: Elitism
 # TODO: Tournament selection only selects better fitness 75% of the time
