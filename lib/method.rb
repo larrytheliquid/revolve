@@ -20,5 +20,6 @@ module Revolve
     def inspect
       "(:#{name} method)"
     end
+    alias_method :to_s, :inspect
   end
 end
