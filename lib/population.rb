@@ -9,7 +9,7 @@ module Revolve
     
     attr_accessor :max_generations, :program_size, :instructions
     attr_accessor :fitness_cases, :fitness_combinator
-    attr_accessor :crossover_chance, :mutation_chance
+    attr_accessor :crossover_percent, :mutation_percent
     def self.initialized(size, parameters)
       population = self.new(size) { Program.randomized(rand(parameters[:program_size].next), parameters[:instructions]) }
       population.max_generations = parameters[:max_generations]
@@ -17,8 +17,8 @@ module Revolve
       population.instructions = parameters[:instructions]
       population.fitness_cases = parameters[:fitness_cases]
       population.fitness_combinator = parameters[:fitness_combinator] 
-      population.crossover_chance = parameters[:crossover_chance]
-      population.mutation_chance = parameters[:mutation_chance]                  
+      population.crossover_percent = parameters[:crossover_percent]
+      population.mutation_percent = parameters[:mutation_percent]                  
       population
     end
     
@@ -34,8 +34,8 @@ module Revolve
     
     def evolve_generation!
       @generation += 1
-      number_of_crossovers = (self.size * crossover_chance).to_i      
-      number_of_mutations = (self.size * mutation_chance).to_i
+      number_of_crossovers = (self.size * crossover_percent).to_i      
+      number_of_mutations = (self.size * mutation_percent).to_i
       self.map! do |ignore| 
         if number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)

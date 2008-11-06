@@ -18,8 +18,8 @@ population = Revolve::Population.initialized( 200, {
                       lambda{|program| program.run( Revolve::Argument.new(:x, 34) ).to_i == 34 },
                       lambda{|program| program.run( Revolve::Argument.new(:x, 55) ).to_i == 55 } ],
   :fitness_combinator => lambda{|cases| cases.inject{|x, y| x && y } ? 0 : 12345 },
-  :crossover_chance => 0.6,
-  :mutation_chance => 0.3
+  :crossover_percent => 0.6,
+  :mutation_percent => 0.3
 })
 
 population.evolve!

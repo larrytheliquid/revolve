@@ -12,8 +12,8 @@ describe Population, "#evolve!" do
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
       :fitness_combinator => @fitness_combinator,
-      :crossover_chance => 0.5,
-      :mutation_chance => 0.25)
+      :crossover_percent => 0.5,
+      :mutation_percent => 0.25)
     @program_1 = Program.new(2, 8, Revolve::Method.new(:+))
     @program_2 = Program.new(1336, Revolve::Method.new(:next))
     @program_3 = Program.new(2, 3, Revolve::Method.new(:+))

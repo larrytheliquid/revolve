@@ -9,8 +9,8 @@ describe Population, "#update_fittest_program!" do
       :size => 0,
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
       :fitness_combinator => @fitness_combinator,
-      :crossover_chance => 0.5,
-      :mutation_chance => 0.25)
+      :crossover_percent => 0.5,
+      :mutation_percent => 0.25)
     @population.push(Program.new(2, 8, Revolve::Method.new(:+)))
     @original_population = @population.clone    
   end

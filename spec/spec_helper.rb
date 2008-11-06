@@ -9,6 +9,6 @@ def new_population(options={})
     {:instructions => ["kitteh", 2, 8, Revolve::Method.new(:+)], 
     :max_generations => 30,
     :program_size => 10,
-    :crossover_chance => 0.8,
-    :mutation_chance => 0.05}.merge(options))
+    :crossover_percent => 0.8,
+    :mutation_percent => 0.05}.merge(options))
 end

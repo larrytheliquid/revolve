@@ -11,8 +11,8 @@ describe Population, "#evolve_generation!" do
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
       :fitness_combinator => @fitness_combinator,
-      :crossover_chance => 0.5,
-      :mutation_chance => 0.25)
+      :crossover_percent => 0.5,
+      :mutation_percent => 0.25)
     @program_1 = Program.new(2, 8, Revolve::Method.new(:+))
     @program_2 = Program.new(1336, Revolve::Method.new(:next))
     @program_3 = Program.new(2, 3, Revolve::Method.new(:+))
@@ -36,12 +36,12 @@ describe Population, "#evolve_generation!" do
     @population.evolve_generation!
   end
   
-  it "should crossover according to the crossover_chance" do
+  it "should crossover according to the crossover_percent" do
     Program.any_instance.expects(:crossover).times(2).returns(@program_1.dup)
     @population.evolve_generation!
   end
   
-  it "should mutate according to the mutation_chance" do
+  it "should mutate according to the mutation_percent" do
     Program.any_instance.expects(:mutate).times(1).returns(@program_1.dup)
     @population.evolve_generation!
   end
