@@ -1,8 +1,9 @@
 module Revolve
   class Population < Array
-    attr_accessor :generation, :fittest_program
+    attr_accessor :generation, :fitness_memory, :fittest_program
     def initialize(*args)
       @generation = 0
+      @fitness_memory = {}
       block_given? ? super(*args) : super(args)
     end
     
@@ -65,7 +66,9 @@ module Revolve
     end        
     
     def fitness(program)
-      fitness_combinator.call( fitness_cases.map{|fitness_case| fitness_case.call(program) } )
+      return fitness_memory[program] if fitness_memory.has_key?(program)
+      fitness_memory[program] = fitness_combinator.call(
+        fitness_cases.map{|fitness_case| fitness_case.call(program) })
     end
   end
 end
