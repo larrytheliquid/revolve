@@ -9,8 +9,8 @@ end
 def cases(num, value)
   (1..num).map do |i|
     lambda do |program|
-      argument = value + i
-      program.run( Revolve::Argument.new(:x, argument) ).to_i - (argument**2 + 1)
+      argument = value + i*2
+      program.run( Revolve::Argument.new(:x, argument) ).to_i - (argument**2 + argument + 1)
     end
   end
 end
@@ -25,9 +25,9 @@ population = Revolve::Population.initialized( 200, {
   :generations_limit => 500,                    
   :fitness_cases => cases(6, 1),
   :error_function => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
-  :elitism_percent => 0.1,
-  :crossover_percent => 0.2,
-  :mutation_percent => 0.7
+  :elitism_percent => 0.2,
+  :crossover_percent => 0.6,
+  :mutation_percent => 0.2
 })
 
 population.evolve!
@@ -35,6 +35,6 @@ population.evolve!
 puts "Generations: #{population.generation}"
 puts "Error: #{population.error(population.fittest)}"
 puts "Program:\n#{population.fittest.inspect}"
-input = Revolve::Argument.new(:x, 8)
+input = Revolve::Argument.new(:x, 14)
 puts "Input: #{input}"
 puts "Output: #{population.fittest.run(input)}"

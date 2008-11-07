@@ -31,10 +31,14 @@ module Revolve
     
     def evolve!
       update_fittest!
-      generations_limit.times do 
+      generations_limit.times do |i|
+        puts "generation: #{i}\n-------------------------"
+        puts self.map{|prog| error(prog) }.inspect
+        puts self.map{|prog| error(prog) }.inject{|x,y| x + y}./(self.size).inspect        
+        puts "------------------------- end"
         break if error(fittest) == 0       
         evolve_generation!    
-        update_fittest!        
+        update_fittest!
       end      
       fittest
     end
@@ -43,8 +47,8 @@ module Revolve
       @generation += 1
       number_of_crossovers = (self.size * crossover_percent).to_i      
       number_of_mutations = (self.size * mutation_percent).to_i
-      elites = elitism
-      self.map! do |ignore| 
+      elites = elitism      
+      self.map do |ignore| 
         if !elites.empty?
           elites.pop
         elsif number_of_crossovers > 0 && number_of_crossovers -= 1          
@@ -54,7 +58,7 @@ module Revolve
         else
           select_program.reproduce
         end
-      end
+      end.each_with_index {|program, index| self[index] = program }
     end
     
     def update_fittest!
@@ -84,7 +88,7 @@ module Revolve
     end
     
     def random_program
-      self[self.size - 1]
+      self[rand(self.size)]
     end        
     
     def error(program)
