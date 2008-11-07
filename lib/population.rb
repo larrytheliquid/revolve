@@ -7,12 +7,13 @@ module Revolve
       block_given? ? super(*args) : super(args)
     end
     
-    SUPPORTED_PARAMETERS = [:program_size, :instructions, :max_generations, :instructions, :fitness_cases,
-                           :fitness_combinator, :greater_fitness_chance, :crossover_percent, :mutation_percent]
+    SUPPORTED_PARAMETERS = [:program_size, :instructions, :max_generations, :instructions, 
+                            :fitness_cases, :fitness_combinator, :greater_fitness_chance, 
+                            :elitism_percent, :crossover_percent, :mutation_percent]
     
     attr_accessor :max_generations, :program_size, :instructions
     attr_accessor :fitness_cases, :fitness_combinator, :greater_fitness_chance
-    attr_accessor :crossover_percent, :mutation_percent
+    attr_accessor :elitism_percent, :crossover_percent, :mutation_percent
     def self.initialized(size, parameters)
       verify_parameters!(parameters.keys)
       population = self.new(size) { Program.randomized(rand(parameters[:program_size].next), parameters[:instructions]) }
@@ -22,6 +23,7 @@ module Revolve
       population.fitness_cases = parameters[:fitness_cases]
       population.fitness_combinator = parameters[:fitness_combinator] 
       population.greater_fitness_chance = parameters[:greater_fitness_chance] || 0.75
+      population.elitism_percent = parameters[:elitism_percent]
       population.crossover_percent = parameters[:crossover_percent]
       population.mutation_percent = parameters[:mutation_percent]                  
       population
@@ -41,8 +43,11 @@ module Revolve
       @generation += 1
       number_of_crossovers = (self.size * crossover_percent).to_i      
       number_of_mutations = (self.size * mutation_percent).to_i
+      elites = elitism
       self.map! do |ignore| 
-        if number_of_crossovers > 0 && number_of_crossovers -= 1          
+        if !elites.empty?
+          elites.pop
+        elsif number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
           select_program.mutate(Program.randomized(rand(program_size.next), instructions))
@@ -58,6 +63,14 @@ module Revolve
         fitness(generations_fittest_program) < fitness(fittest_program) ? generations_fittest_program : fittest_program
       else
         generations_fittest_program
+      end
+    end
+    
+    def elitism
+      if elitism_percent
+        self.sort{|x, y| fitness(x) <=> fitness(y) }.slice(0, (self.size * elitism_percent).to_i)
+      else
+        []
       end
     end
     

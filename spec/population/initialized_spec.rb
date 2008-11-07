@@ -5,8 +5,8 @@ module Revolve
 describe Population, ".initialized" do
   before do
     @population = new_population(:size => 3, :max_generations => 20, 
-                                 :program_size => 10, :crossover_percent => 0.8, 
-                                 :mutation_percent => 0.05)
+                                 :program_size => 10, :crossover_percent => 0.6, 
+                                 :mutation_percent => 0.2, :elitism_percent => 0.1)
   end
   
   it "should be generation 0" do
@@ -34,12 +34,16 @@ describe Population, ".initialized" do
     @population.greater_fitness_chance.should == 0.9
   end
   
+  it "should have a elitism_percent" do
+    @population.elitism_percent.should == 0.1
+  end
+  
   it "should have a crossover_percent" do
-    @population.crossover_percent.should == 0.8
+    @population.crossover_percent.should == 0.6
   end
   
   it "should have a mutation_percent" do
-    @population.mutation_percent.should == 0.05
+    @population.mutation_percent.should == 0.2
   end    
   
   it "should raise an exception when using an unsupported option" do

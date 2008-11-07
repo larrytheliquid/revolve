@@ -15,6 +15,7 @@ population = Revolve::Population.initialized( 200, {
   :max_generations => 500,                    
   :fitness_cases => [ lambda{|program| program.run.to_i - 120 } ],
   :fitness_combinator => lambda{|cases| cases.first.abs },
+  :elitism_percent => 0.05,
   :crossover_percent => 0.6,
   :mutation_percent => 0.3
 })
