@@ -8,7 +8,7 @@ module Revolve
     end
     
     attr_accessor :max_generations, :program_size, :instructions
-    attr_accessor :fitness_cases, :fitness_combinator
+    attr_accessor :fitness_cases, :fitness_combinator, :greater_fitness_chance
     attr_accessor :crossover_percent, :mutation_percent
     def self.initialized(size, parameters)
       population = self.new(size) { Program.randomized(rand(parameters[:program_size].next), parameters[:instructions]) }
@@ -17,6 +17,7 @@ module Revolve
       population.instructions = parameters[:instructions]
       population.fitness_cases = parameters[:fitness_cases]
       population.fitness_combinator = parameters[:fitness_combinator] 
+      population.greater_fitness_chance = parameters[:greater_fitness_chance] || 0.75
       population.crossover_percent = parameters[:crossover_percent]
       population.mutation_percent = parameters[:mutation_percent]                  
       population
@@ -58,7 +59,11 @@ module Revolve
     
     def select_program
       first_program, second_program = random_program, random_program
-      fitness(first_program) <= fitness(second_program) ? first_program : second_program
+      if rand < greater_fitness_chance
+        fitness(first_program) <= fitness(second_program) ? first_program : second_program
+      else
+        fitness(first_program) <= fitness(second_program) ? second_program : first_program
+      end      
     end
     
     def random_program

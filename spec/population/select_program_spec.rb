@@ -19,10 +19,23 @@ module Revolve
       @population.select_program.should be_kind_of(Program)
     end
     
-    it "should select 2 random programs, and return the fitter" do
-      @population.expects(:random_program).times(2).returns(@more_fit_program, @less_fit_program)
-      @population.select_program.should == @more_fit_program
-    end        
+    describe "with a matched greater fitness chance" do
+      before { @population.greater_fitness_chance = 1.01 }
+      
+      it "should select 2 random programs, and return the fitter" do
+        @population.expects(:random_program).times(2).returns(@more_fit_program, @less_fit_program)
+        @population.select_program.should == @more_fit_program
+      end
+    end
+    
+    describe "with an unmatched greater fitness chance" do
+      before { @population.greater_fitness_chance = -0.01 }      
+      
+      it "should select 2 random programs, and return the less fit" do
+        @population.expects(:random_program).times(2).returns(@more_fit_program, @less_fit_program)
+        @population.select_program.should == @less_fit_program
+      end
+    end                
   end
   
 end
