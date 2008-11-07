@@ -13,8 +13,8 @@ describe Program, "#mutate" do
     @child.should be_kind_of(Program)
   end
   
-  it "should be of length no greater than the sum of the program and its mutation" do
-    @child.length.should_not > 10
+  it "should be of length equal to the sum of the program - 1 and its mutation" do
+    @child.length.should == 9
   end
   
   it "should only contain instructions from either program or mutation" do

@@ -35,7 +35,9 @@ module Revolve
     end
     
     def mutate(mutation)
-      random_slice + mutation
+      result = self.dup
+      result[rand(self.size)] = mutation
+      result.flatten
     end
     
     def +(program)
