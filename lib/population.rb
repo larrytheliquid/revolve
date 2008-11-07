@@ -7,10 +7,14 @@ module Revolve
       block_given? ? super(*args) : super(args)
     end
     
+    SUPPORTED_PARAMETERS = [:program_size, :instructions, :max_generations, :instructions, :fitness_cases,
+                           :fitness_combinator, :greater_fitness_chance, :crossover_percent, :mutation_percent]
+    
     attr_accessor :max_generations, :program_size, :instructions
     attr_accessor :fitness_cases, :fitness_combinator, :greater_fitness_chance
     attr_accessor :crossover_percent, :mutation_percent
     def self.initialized(size, parameters)
+      verify_parameters!(parameters.keys)
       population = self.new(size) { Program.randomized(rand(parameters[:program_size].next), parameters[:instructions]) }
       population.max_generations = parameters[:max_generations]
       population.program_size = parameters[:program_size]
@@ -74,6 +78,14 @@ module Revolve
       return fitness_memory[program] if fitness_memory.has_key?(program)
       fitness_memory[program] = fitness_combinator.call(
         fitness_cases.map{|fitness_case| fitness_case.call(program) })
+    end    
+    
+  private
+  
+    def self.verify_parameters!(parameters)
+      parameters.each do |parameter|
+        raise Exception.new("Parameter '#{parameter}' is not supported") unless SUPPORTED_PARAMETERS.include?(parameter)
+      end
     end
   end
 end

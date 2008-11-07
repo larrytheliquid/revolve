@@ -25,6 +25,15 @@ describe Population, ".initialized" do
     @population.program_size.should == 10
   end
   
+  it "should have a default greater_fitness_chance" do
+    @population.greater_fitness_chance.should == 0.75
+  end
+  
+  it "should have a greater_fitness_chance" do
+    @population.greater_fitness_chance = 0.9
+    @population.greater_fitness_chance.should == 0.9
+  end
+  
   it "should have a crossover_percent" do
     @population.crossover_percent.should == 0.8
   end
@@ -32,6 +41,10 @@ describe Population, ".initialized" do
   it "should have a mutation_percent" do
     @population.mutation_percent.should == 0.05
   end    
+  
+  it "should raise an exception when using an unsupported option" do
+    lambda { new_population(:unsupported => "option") }.should raise_error
+  end
 end
   
 end
