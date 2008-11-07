@@ -7,25 +7,16 @@ module Revolve
       block_given? ? super(*args) : super(args)
     end
     
-    SUPPORTED_PARAMETERS = [:size_limit, :instructions, :generations_limit, :instructions, 
-                            :fitness_cases, :error_function, :greater_fitness_chance, 
-                            :elitism_percent, :crossover_percent, :mutation_percent]
+    SUPPORTED_PARAMETERS = {:size_limit => nil, :instructions => nil, :generations_limit => nil, 
+                            :instructions => nil, :fitness_cases => nil, :error_function => nil, 
+                            :greater_fitness_chance => 0.75, :elitism_percent => 0, 
+                            :crossover_percent => 0, :mutation_percent => 0, :reproduction_percent => 0}
     
-    attr_accessor :generations_limit, :size_limit, :instructions
-    attr_accessor :fitness_cases, :error_function, :greater_fitness_chance
-    attr_accessor :elitism_percent, :crossover_percent, :mutation_percent
+    attr_accessor *SUPPORTED_PARAMETERS.keys
     def self.initialized(size, parameters)
       verify_parameters!(parameters.keys)
       population = self.new(size) { Program.randomized(rand(parameters[:size_limit]).next, parameters[:instructions]) }
-      population.generations_limit = parameters[:generations_limit]
-      population.size_limit = parameters[:size_limit]
-      population.instructions = parameters[:instructions]
-      population.fitness_cases = parameters[:fitness_cases]
-      population.error_function = parameters[:error_function] 
-      population.greater_fitness_chance = parameters[:greater_fitness_chance] || 0.75
-      population.elitism_percent = parameters[:elitism_percent]
-      population.crossover_percent = parameters[:crossover_percent]
-      population.mutation_percent = parameters[:mutation_percent]                  
+      SUPPORTED_PARAMETERS.each {|key, value| population.send("#{key}=", parameters[key] || value) }
       population
     end
     
@@ -57,6 +48,7 @@ module Revolve
       @generation += 1
       number_of_crossovers = (self.size * crossover_percent).to_i      
       number_of_mutations = (self.size * mutation_percent).to_i
+      number_of_reproductions = (self.size * reproduction_percent).to_i
       elites = elitism      
       self.map do |ignore| 
         if !elites.empty?
@@ -65,6 +57,8 @@ module Revolve
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
           select_program.mutate(Program.randomized(rand(size_limit./(2).to_i).next, instructions))
+        elsif number_of_reproductions > 0 && number_of_reproductions -= 1          
+          select_program.reproduce
         else
           produce
         end
@@ -115,7 +109,7 @@ module Revolve
   
     def self.verify_parameters!(parameters)
       parameters.each do |parameter|
-        raise Exception.new("Parameter '#{parameter}' is not supported") unless SUPPORTED_PARAMETERS.include?(parameter)
+        raise Exception.new("Parameter '#{parameter}' is not supported") unless SUPPORTED_PARAMETERS.keys.include?(parameter)
       end
     end
   end

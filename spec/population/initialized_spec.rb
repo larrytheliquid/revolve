@@ -4,9 +4,7 @@ module Revolve
   
 describe Population, ".initialized" do
   before do
-    @population = new_population(:size => 3, :generations_limit => 20, 
-                                 :size_limit => 10, :crossover_percent => 0.6, 
-                                 :mutation_percent => 0.2, :elitism_percent => 0.1)
+    @population = new_population(:size => 3, :generations_limit => 20, :size_limit => 10)
   end
   
   it "should be generation 0" do
@@ -34,15 +32,39 @@ describe Population, ".initialized" do
     @population.greater_fitness_chance.should == 0.9
   end
   
+  it "should have a default elitism_percent of 0" do
+    @population.elitism_percent.should == 0
+  end
+  
   it "should have a elitism_percent" do
-    @population.elitism_percent.should == 0.1
+    @population.elitism_percent = 0.05
+    @population.elitism_percent.should == 0.05
+  end
+  
+  it "should have a default reproduction_percent of 0" do
+    @population.reproduction_percent.should == 0
+  end
+  
+  it "should have a reproduction_percent" do
+    @population.reproduction_percent = 0.05    
+    @population.reproduction_percent.should == 0.05
+  end
+  
+  it "should have a default crossover_percent of 0" do
+    @population.crossover_percent.should == 0
   end
   
   it "should have a crossover_percent" do
+    @population.crossover_percent = 0.6    
     @population.crossover_percent.should == 0.6
   end
   
+  it "should have a default mutation_percent of 0" do
+    @population.mutation_percent.should == 0
+  end
+  
   it "should have a mutation_percent" do
+      @population.mutation_percent = 0.2  
     @population.mutation_percent.should == 0.2
   end    
   

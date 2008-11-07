@@ -11,7 +11,8 @@ describe Population, "#evolve_generation!" do
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
       :error_function => @error_function,
-      :elitism_percent => 0.3,      
+      :elitism_percent => 0.3,     
+      :reproduction_percent => 0.2, 
       :crossover_percent => 0.45,
       :mutation_percent => 0.2)
     @program_1 = Program.new(2, 8, Revolve::Method.new(:+))
@@ -20,8 +21,9 @@ describe Population, "#evolve_generation!" do
     @program_4 = Program.new(3, 5, Revolve::Method.new(:*))
     @program_5 = Program.new(14)
     @program_6 = Program.new(15)
-    @program_7 = Program.new(16)            
-    @population.push(@program_1).push(@program_2).push(@program_3).push(@program_4).push(@program_5).push(@program_6).push(@program_7)
+    @program_7 = Program.new(16)    
+    @program_8 = Program.new(17)
+    @population.push(@program_1).push(@program_2).push(@program_3).push(@program_4).push(@program_5).push(@program_6).push(@program_7).push(@program_8)
     @original_population = @population.clone    
   end
   
@@ -36,7 +38,7 @@ describe Population, "#evolve_generation!" do
   end
   
   it "should use selection when selecting programs for next generation" do
-    @population.expects(:select_program).times(7).returns(@program_1)
+    @population.expects(:select_program).times(8).returns(@program_1)
     @population.evolve_generation!
   end
   
@@ -52,6 +54,11 @@ describe Population, "#evolve_generation!" do
   
   it "should mutate according to the mutation_percent" do
     Program.any_instance.expects(:mutate).times(1).returns(@program_1.dup)
+    @population.evolve_generation!
+  end
+  
+  it "should reproduce according to the the remaining percentage" do
+    Program.any_instance.expects(:reproduce).times(1).returns(@program_1.dup)
     @population.evolve_generation!
   end
   
