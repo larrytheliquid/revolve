@@ -16,7 +16,7 @@ module Revolve
     attr_accessor :elitism_percent, :crossover_percent, :mutation_percent
     def self.initialized(size, parameters)
       verify_parameters!(parameters.keys)
-      population = self.new(size) { Program.randomized(rand(parameters[:size_limit].next), parameters[:instructions]) }
+      population = self.new(size) { Program.randomized(rand(parameters[:size_limit]).next, parameters[:instructions]) }
       population.generations_limit = parameters[:generations_limit]
       population.size_limit = parameters[:size_limit]
       population.instructions = parameters[:instructions]
@@ -33,8 +33,10 @@ module Revolve
       update_fittest!
       generations_limit.times do |i|
         puts "generation: #{i}\n-------------------------"
-        puts self.map{|prog| error(prog) }.inspect
-        puts self.map{|prog| error(prog) }.inject{|x,y| x + y}./(self.size).inspect        
+        # self.each{|prog| puts prog.inspect }
+        puts self.map{|prog| prog.size }.inject{|x,y| x + y}./(self.size).inspect        
+        # puts self.map{|prog| error(prog) }.inspect
+        # puts self.map{|prog| error(prog) }.inject{|x,y| x + y}./(self.size).inspect        
         puts "------------------------- end"
         break if error(fittest) == 0       
         evolve_generation!    
@@ -54,7 +56,7 @@ module Revolve
         elsif number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
-          select_program.mutate(Program.randomized(rand(size_limit.next), instructions))
+          select_program.mutate(Program.randomized(rand(size_limit./(2).to_i).next, instructions))
         else
           select_program.reproduce
         end

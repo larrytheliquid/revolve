@@ -47,11 +47,11 @@ module Revolve
     end
     
     def slice_left
-      self.slice( 0, rand(self.size.next) )
+      self.slice( 0, rand(self.size).next )
     end
     
     def slice_right
-      self.slice( -rand(self.size.next), self.size )
+      self.slice( -rand(self.size).next, self.size )
     end
   end
 end
