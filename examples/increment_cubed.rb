@@ -22,12 +22,12 @@ population = Revolve::Population.initialized( 200, {
                      Revolve::Method.new(:+), Revolve::Method.new(:-), 
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
                      Revolve::Variable.new(:x) ],
-  :generations_limit => 200,                    
-  :fitness_cases => cases(6, 1),
+  :generations_limit => 500,                    
+  :fitness_cases => cases(5, 1),
   :error_function => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
-  :elitism_percent => 0.2,
+  :elitism_percent => 0.1,
   :crossover_percent => 0.6,
-  :mutation_percent => 0.2
+  :mutation_percent => 0.3
 })
 
 population.evolve!

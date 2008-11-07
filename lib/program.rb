@@ -31,7 +31,7 @@ module Revolve
     end
     
     def crossover(mate)
-      [self, mate].inject {|x, y| x.random_slice + y.random_slice }
+      self.random_subset + mate.random_subset
     end
     
     def mutate(mutation)
@@ -44,6 +44,10 @@ module Revolve
     
     def random_slice
       rand(2) == 1 ? self.slice_left : self.slice_right
+    end
+    
+    def random_subset
+      self.slice( rand(self.size) / 2, rand(self.size) / 2 + 1 )
     end
     
     def slice_left
