@@ -4,13 +4,13 @@ module Revolve
   
 describe Population, "#evolve_generation!" do
   before do
-    @fitness_combinator = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
+    @error_function = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
     @population = new_population(
       :size => 0,
       :instructions => [2, 3, 5, 8, 1337, 
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
-      :fitness_combinator => @fitness_combinator,
+      :error_function => @error_function,
       :elitism_percent => 0.3,      
       :crossover_percent => 0.45,
       :mutation_percent => 0.2)

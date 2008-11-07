@@ -4,11 +4,11 @@ module Revolve
   
 describe Population, "#elitism" do
   before do
-    @fitness_combinator = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
+    @error_function = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
     @population = new_population(
       :size => 0,
       :fitness_cases => [ lambda{|program| program.run - 12 } ],
-      :fitness_combinator => @fitness_combinator)
+      :error_function => @error_function)
     @very_fit_program = Program.new(11)
     @fit_program = Program.new(10)
     @somewhat_fit_program = Program.new(7)

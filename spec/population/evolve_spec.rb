@@ -4,14 +4,14 @@ module Revolve
   
 describe Population, "#evolve!" do
   before do
-    @fitness_combinator = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
+    @error_function = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
     @population = new_population(
       :size => 0,
-      :max_generations => 5,
+      :generations_limit => 5,
       :instructions => [2, 3, 5, 8, 1337, 
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
-      :fitness_combinator => @fitness_combinator,
+      :error_function => @error_function,
       :crossover_percent => 0.5,
       :mutation_percent => 0.25)
     @program_1 = Program.new(2, 8, Revolve::Method.new(:+))
@@ -26,7 +26,7 @@ describe Population, "#evolve!" do
     @population.evolve!.should be_kind_of(Program)
   end
   
-  it "should not evolve past max_generations" do
+  it "should not evolve past generations_limit" do
     @population.evolve!
     @population.generation.should_not > 5
   end

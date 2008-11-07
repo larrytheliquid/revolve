@@ -1,27 +1,27 @@
 module Revolve
   class Population < Array
-    attr_accessor :generation, :fitness_memory, :fittest_program
+    attr_accessor :generation, :error_memory, :fittest
     def initialize(*args)
       @generation = 0
-      @fitness_memory = {}
+      @error_memory = {}
       block_given? ? super(*args) : super(args)
     end
     
-    SUPPORTED_PARAMETERS = [:program_size, :instructions, :max_generations, :instructions, 
-                            :fitness_cases, :fitness_combinator, :greater_fitness_chance, 
+    SUPPORTED_PARAMETERS = [:size_limit, :instructions, :generations_limit, :instructions, 
+                            :fitness_cases, :error_function, :greater_fitness_chance, 
                             :elitism_percent, :crossover_percent, :mutation_percent]
     
-    attr_accessor :max_generations, :program_size, :instructions
-    attr_accessor :fitness_cases, :fitness_combinator, :greater_fitness_chance
+    attr_accessor :generations_limit, :size_limit, :instructions
+    attr_accessor :fitness_cases, :error_function, :greater_fitness_chance
     attr_accessor :elitism_percent, :crossover_percent, :mutation_percent
     def self.initialized(size, parameters)
       verify_parameters!(parameters.keys)
-      population = self.new(size) { Program.randomized(rand(parameters[:program_size].next), parameters[:instructions]) }
-      population.max_generations = parameters[:max_generations]
-      population.program_size = parameters[:program_size]
+      population = self.new(size) { Program.randomized(rand(parameters[:size_limit].next), parameters[:instructions]) }
+      population.generations_limit = parameters[:generations_limit]
+      population.size_limit = parameters[:size_limit]
       population.instructions = parameters[:instructions]
       population.fitness_cases = parameters[:fitness_cases]
-      population.fitness_combinator = parameters[:fitness_combinator] 
+      population.error_function = parameters[:error_function] 
       population.greater_fitness_chance = parameters[:greater_fitness_chance] || 0.75
       population.elitism_percent = parameters[:elitism_percent]
       population.crossover_percent = parameters[:crossover_percent]
@@ -30,13 +30,13 @@ module Revolve
     end
     
     def evolve!
-      update_fittest_program!
-      max_generations.times do 
-        break if fitness(fittest_program) == 0       
+      update_fittest!
+      generations_limit.times do 
+        break if error(fittest) == 0       
         evolve_generation!    
-        update_fittest_program!        
+        update_fittest!        
       end      
-      fittest_program
+      fittest
     end
     
     def evolve_generation!
@@ -50,25 +50,25 @@ module Revolve
         elsif number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
-          select_program.mutate(Program.randomized(rand(program_size.next), instructions))
+          select_program.mutate(Program.randomized(rand(size_limit.next), instructions))
         else
           select_program.reproduce
         end
       end
     end
     
-    def update_fittest_program!
-      generations_fittest_program = self.min{|x, y| fitness(x) <=> fitness(y) }
-      @fittest_program = if fittest_program        
-        fitness(generations_fittest_program) < fitness(fittest_program) ? generations_fittest_program : fittest_program
+    def update_fittest!
+      generations_fittest = self.min{|x, y| error(x) <=> error(y) }
+      @fittest = if fittest        
+        error(generations_fittest) < error(fittest) ? generations_fittest : fittest
       else
-        generations_fittest_program
+        generations_fittest
       end
     end
     
     def elitism
       if elitism_percent
-        self.sort{|x, y| fitness(x) <=> fitness(y) }.slice(0, (self.size * elitism_percent).to_i)
+        self.sort{|x, y| error(x) <=> error(y) }.slice(0, (self.size * elitism_percent).to_i)
       else
         []
       end
@@ -77,9 +77,9 @@ module Revolve
     def select_program
       first_program, second_program = random_program, random_program
       if rand < greater_fitness_chance
-        fitness(first_program) <= fitness(second_program) ? first_program : second_program
+        error(first_program) <= error(second_program) ? first_program : second_program
       else
-        fitness(first_program) <= fitness(second_program) ? second_program : first_program
+        error(first_program) <= error(second_program) ? second_program : first_program
       end      
     end
     
@@ -87,9 +87,9 @@ module Revolve
       self[self.size - 1]
     end        
     
-    def fitness(program)
-      return fitness_memory[program] if fitness_memory.has_key?(program)
-      fitness_memory[program] = fitness_combinator.call(
+    def error(program)
+      return error_memory[program] if error_memory.has_key?(program)
+      error_memory[program] = error_function.call(
         fitness_cases.map{|fitness_case| fitness_case.call(program) })
     end    
     

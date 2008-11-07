@@ -17,14 +17,14 @@ end
 
 # x**2 + x + 1
 population = Revolve::Population.initialized( 200, {  
-  :program_size => 10,
+  :size_limit => 10,
   :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,
                      Revolve::Method.new(:+), Revolve::Method.new(:-), 
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
                      Revolve::Variable.new(:x) ],
-  :max_generations => 500,                    
+  :generations_limit => 500,                    
   :fitness_cases => cases(6, 1),
-  :fitness_combinator => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
+  :error_function => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
   :elitism_percent => 0.1,
   :crossover_percent => 0.2,
   :mutation_percent => 0.7
@@ -33,8 +33,8 @@ population = Revolve::Population.initialized( 200, {
 population.evolve!
 
 puts "Generations: #{population.generation}"
-puts "Fitness: #{population.fitness(population.fittest_program)}"
-puts "Program:\n#{population.fittest_program.inspect}"
+puts "Error: #{population.error(population.fittest)}"
+puts "Program:\n#{population.fittest.inspect}"
 input = Revolve::Argument.new(:x, 8)
 puts "Input: #{input}"
-puts "Output: #{population.fittest_program.run(input)}"
+puts "Output: #{population.fittest.run(input)}"

@@ -4,11 +4,11 @@ module Revolve
   
   describe Population, "#select_program" do
     before do
-      @fitness_combinator = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
+      @error_function = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
       @population = new_population(
         :size => 0,
         :fitness_cases => [ lambda{|program| program.run - 12 } ],
-        :fitness_combinator => @fitness_combinator)
+        :error_function => @error_function)
       @more_fit_program = Program.new(2, 8, Revolve::Method.new(:+))
       @some_program = Program.new(1336, Revolve::Method.new(:next))
       @less_fit_program = Program.new(2, 3, Revolve::Method.new(:+))

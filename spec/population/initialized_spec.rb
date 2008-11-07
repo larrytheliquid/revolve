@@ -4,8 +4,8 @@ module Revolve
   
 describe Population, ".initialized" do
   before do
-    @population = new_population(:size => 3, :max_generations => 20, 
-                                 :program_size => 10, :crossover_percent => 0.6, 
+    @population = new_population(:size => 3, :generations_limit => 20, 
+                                 :size_limit => 10, :crossover_percent => 0.6, 
                                  :mutation_percent => 0.2, :elitism_percent => 0.1)
   end
   
@@ -17,12 +17,12 @@ describe Population, ".initialized" do
     @population.size.should == 3
   end
   
-  it "should have a max_generations" do
-    @population.max_generations.should == 20
+  it "should have a generations_limit" do
+    @population.generations_limit.should == 20
   end
   
-  it "should have a program_size" do
-    @population.program_size.should == 10
+  it "should have a size_limit" do
+    @population.size_limit.should == 10
   end
   
   it "should have a default greater_fitness_chance" do
