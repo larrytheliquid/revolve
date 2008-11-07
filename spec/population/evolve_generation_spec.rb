@@ -36,7 +36,7 @@ describe Population, "#evolve_generation!" do
   end
   
   it "should use selection when selecting programs for next generation" do
-    @population.expects(:select_program).times(8).returns(@program_1)
+    @population.expects(:select_program).times(7).returns(@program_1)
     @population.evolve_generation!
   end
   
@@ -55,8 +55,8 @@ describe Population, "#evolve_generation!" do
     @population.evolve_generation!
   end
   
-  it "should reproduce according to the the remaining percentage" do
-    Program.any_instance.expects(:reproduce).times(1).returns(@program_1.dup)
+  it "should produce according to the the remaining percentage" do
+    Population.any_instance.expects(:produce).times(1).returns(@program_1.dup)
     @population.evolve_generation!
   end
   

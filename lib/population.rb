@@ -60,7 +60,7 @@ module Revolve
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
           select_program.mutate(Program.randomized(rand(size_limit./(2).to_i).next, instructions))
         else
-          select_program.reproduce
+          produce
         end
       end.each_with_index {|program, index| self[index] = program }
     end
@@ -80,6 +80,10 @@ module Revolve
       else
         []
       end
+    end
+    
+    def produce
+      Program.randomized(rand(size_limit).next, instructions)
     end
     
     def select_program
