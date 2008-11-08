@@ -1,5 +1,8 @@
 require File.join(File.dirname(__FILE__), "..", "revolve")
 
+puts "Warning: This does consistently converge to a solution yet, it often is -1 off of perfect."
+puts "Until that is taken care of, it may take long to run as it climbs up to the 500 generation maximum."
+
 class Integer
   def protected_division(divisor)
     self / divisor rescue 1
