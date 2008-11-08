@@ -17,7 +17,7 @@ end
 
 # (x+1)**3
 population = Revolve::Population.initialized( 200, {  
-  :size_limit => 40,
+  :size_limit => 20,
   :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,
                      Revolve::Method.new(:+), Revolve::Method.new(:-), 
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
@@ -25,8 +25,8 @@ population = Revolve::Population.initialized( 200, {
   :generations_limit => 500,                    
   :fitness_cases => cases(6, 1),
   :error_function => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
-  :elitism_percent => 0.15,
-  :crossover_percent => 0.6,
+  :elitism_percent => 0.3,
+  :crossover_percent => 0.5,
   :mutation_percent => 0.0
 })
 
