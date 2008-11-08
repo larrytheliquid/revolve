@@ -36,7 +36,7 @@ module Revolve
     
     def mutate(mutation)
       result = self.dup
-      result[rand(self.size)] = mutation
+      result[rand(result.size)] = mutation
       result.flatten
     end
     
@@ -49,7 +49,7 @@ module Revolve
     end
     
     def random_subset
-      self.slice( rand(self.size) / 2, rand(self.size) / 2 + 1 )
+      self.slice( rand(self.size), rand(self.size) + 1 )
     end
     
     def slice_left

@@ -22,25 +22,25 @@ module Revolve
     
     def evolve!
       update_fittest!
-      # output = []
+      output = []
       generations_limit.times do |i|
         puts "generation: #{i}\n-------------------------"
         # self.each{|prog| puts prog.inspect }
         # puts self.map{|prog| prog.size }
-        # puts self.map{|prog| prog.size }.inject{|x,y| x + y}./(self.size).inspect        
-        # output << self.map{|prog| error(prog) }.join(" ")
-        puts self.map{|prog| error(prog) }.inspect
+        puts self.map{|prog| prog.size }.inject{|x,y| x + y}./(self.size).inspect        
+        output << self.map{|prog| error(prog) }.join(" ")
+        # puts self.map{|prog| error(prog) }.inspect
         # puts self.map{|prog| error(prog) }.inject{|x,y| x + y}./(self.size).inspect        
-        puts error(fittest)        
+        # puts error(fittest)        
         puts "------------------------- end"
         break if error(fittest) == 0       
         evolve_generation!    
         update_fittest!
       end      
-      # output = output.join("\n")
-      # path = "/Users/larrytheliquid/Desktop/gp_output.txt"
-      # File.delete(path) if File.exists?(path)
-      # File.open(path, 'w') {|f| f.write(output) }      
+      output = output.join("\n")
+      path = "/Users/larrytheliquid/Documents/MATLAB/larry_gp/run_dir/gp_output.txt"
+      File.delete(path) if File.exists?(path)
+      File.open(path, 'w') {|f| f.write(output) }      
       fittest
     end
     
@@ -56,7 +56,7 @@ module Revolve
         elsif number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
-          select_program.mutate(Program.randomized(rand(size_limit./(2).to_i).next, instructions))
+          select_program.mutate(Program.randomized(rand(size_limit).next, instructions))
         elsif number_of_reproductions > 0 && number_of_reproductions -= 1          
           select_program.reproduce
         else
@@ -76,7 +76,7 @@ module Revolve
     
     def elitism
       if elitism_percent
-        self.sort{|x, y| error(x) <=> error(y) }.slice(0, (self.size * elitism_percent).to_i)
+        self.uniq.sort{|x, y| error(x) <=> error(y) }.slice(0, (self.size * elitism_percent).to_i)
       else
         []
       end
