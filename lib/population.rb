@@ -56,7 +56,7 @@ module Revolve
         elsif number_of_crossovers > 0 && number_of_crossovers -= 1          
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
-          select_program.mutate(Program.randomized(rand(size_limit).next, instructions))
+          select_program.mutate(instructions, size_limit)
         elsif number_of_reproductions > 0 && number_of_reproductions -= 1          
           select_program.reproduce
         else

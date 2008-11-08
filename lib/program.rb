@@ -34,10 +34,12 @@ module Revolve
       self.random_subset + mate.random_subset
     end
     
-    def mutate(mutation)
+    def mutate(instructions, size_limit)
       result = self.dup
-      result[rand(result.size)] = mutation
-      result.flatten
+      result.each_with_index do |inst, index| 
+        result[index] = instructions[rand(instructions.size)]  if rand < (1.5 / (size_limit*0.5))
+      end
+      result
     end
     
     def +(program)
@@ -50,14 +52,6 @@ module Revolve
     
     def random_subset
       self.slice( rand(self.size), rand(self.size) + 1 )
-    end
-    
-    def slice_left
-      self.slice( 0, rand(self.size).next )
-    end
-    
-    def slice_right
-      self.slice( -rand(self.size).next, self.size )
     end
   end
 end
