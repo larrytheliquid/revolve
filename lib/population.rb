@@ -24,15 +24,15 @@ module Revolve
       update_fittest!
       output = []
       generations_limit.times do |i|
-        puts "generation: #{i}\n-------------------------"
+        # puts "generation: #{i}\n-------------------------"
         # self.each{|prog| puts prog.inspect }
         # puts self.map{|prog| prog.size }
-        puts self.map{|prog| prog.size }.inject{|x,y| x + y}./(self.size).inspect        
+        # puts self.map{|prog| prog.size }.inject{|x,y| x + y}./(self.size).inspect        
         output << self.map{|prog| error(prog) }.join(" ")
         # puts self.map{|prog| error(prog) }.inspect
         # puts self.map{|prog| error(prog) }.inject{|x,y| x + y}./(self.size).inspect        
         # puts error(fittest)        
-        puts "------------------------- end"
+        # puts "------------------------- end"
         break if error(fittest) == 0       
         evolve_generation!    
         update_fittest!
