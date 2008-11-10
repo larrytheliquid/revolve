@@ -17,7 +17,10 @@ module Revolve
     end
     
     describe "with a matched greater fitness chance" do
-      before { @population.greater_fitness_chance = 1.01 }
+      before do 
+        Population.any_instance.stubs(:random_program).returns(@more_fit_program, @less_fit_program)
+        @population.greater_fitness_chance = 1337
+      end
       
       it "should select 2 random programs, and return the fitter" do
         @population.select_program.should == @more_fit_program
@@ -25,7 +28,10 @@ module Revolve
     end
     
     describe "with an unmatched greater fitness chance" do
-      before { @population.greater_fitness_chance = -0.01 }      
+      before do 
+        Population.any_instance.stubs(:random_program).returns(@more_fit_program, @less_fit_program)        
+        @population.greater_fitness_chance = -1337 
+      end
       
       it "should select 2 random programs, and return the less fit" do
         @population.select_program.should == @less_fit_program

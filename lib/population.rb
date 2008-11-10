@@ -1,5 +1,3 @@
-# pass in stack for thread safety
-
 module Revolve
   class Population < Array
     attr_accessor :generation, :error_memory, :fittest
@@ -24,25 +22,11 @@ module Revolve
     
     def evolve!
       update_fittest!
-      # output = []
       generations_limit.times do |i|
-        # puts "generation: #{i}\n-------------------------"
-        # self.each{|prog| puts prog.inspect }
-        # puts self.map{|prog| prog.size }
-        # puts self.map{|prog| prog.size }.inject{|x,y| x + y}./(self.size).inspect        
-        # output << self.map{|prog| error(prog) }.join(" ")
-        # puts self.map{|prog| error(prog) }.inspect
-        # puts self.map{|prog| error(prog) }.inject{|x,y| x + y}./(self.size).inspect        
-        # puts error(fittest)        
-        # puts "------------------------- end"
         break if error(fittest) == 0       
         evolve_generation!    
         update_fittest!
       end      
-      # output = output.join("\n")
-      # path = "/Users/larrytheliquid/Documents/MATLAB/larry_gp/run_dir/gp_output.txt"
-      # File.delete(path) if File.exists?(path)
-      # File.open(path, 'w') {|f| f.write(output) }      
       fittest
     end
     

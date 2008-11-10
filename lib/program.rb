@@ -1,9 +1,12 @@
+# TODO: pass in stack copy for thread safety
 module Revolve
   class Program < Array
     attr_accessor :stack
     def initialize(*args)
       @stack = []
-      block_given? ? super(*args) : super(args)
+      result = block_given? ? super(*args) : super(args)
+      result.each_with_index{|instruction, index| result[index] = instruction.value if instruction.is_a?(ERK) }
+      result
     end
     
     def self.randomized(length, instructions)
