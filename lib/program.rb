@@ -26,10 +26,6 @@ module Revolve
       result
     end
     
-    def reproduce
-      self.dup
-    end
-    
     def crossover(mate)
       self.random_subset + mate.random_subset
     end

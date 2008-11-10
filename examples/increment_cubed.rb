@@ -21,7 +21,7 @@ end
 # (x+1)**3
 population = Revolve::Population.initialized( 200, {  
   :size_limit => 20,
-  :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  :instructions => [ 1,# 2, 3, 4, 5, 6, 7, 8, 9,
                      Revolve::Method.new(:+), Revolve::Method.new(:-), 
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
                      Revolve::Variable.new(:x) ],

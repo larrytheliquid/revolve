@@ -1,3 +1,5 @@
+# pass in stack for thread safety
+
 module Revolve
   class Population < Array
     attr_accessor :generation, :error_memory, :fittest
@@ -48,7 +50,6 @@ module Revolve
       @generation += 1
       number_of_crossovers = (self.size * crossover_percent).to_i      
       number_of_mutations = (self.size * mutation_percent).to_i
-      number_of_reproductions = (self.size * reproduction_percent).to_i
       elites = elitism      
       self.map do |ignore| 
         if !elites.empty?
@@ -57,8 +58,6 @@ module Revolve
           select_program.crossover(select_program)
         elsif number_of_mutations > 0 && number_of_mutations -= 1          
           select_program.mutate(instructions, size_limit)
-        elsif number_of_reproductions > 0 && number_of_reproductions -= 1          
-          select_program.reproduce
         else
           produce
         end
