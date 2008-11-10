@@ -36,7 +36,10 @@ module Revolve
     def mutate(instructions, size_limit)
       result = self.dup
       result.each_with_index do |inst, index| 
-        result[index] = instructions[rand(instructions.size)]  if rand < (1.5 / (size_limit*0.5))
+        if rand < (1.5 / (size_limit*0.5))
+          instruction = instructions[rand(instructions.size)]
+          result[index] = instruction.is_a?(ERK) ? instruction.value : instruction
+        end
       end
       result
     end

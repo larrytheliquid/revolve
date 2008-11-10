@@ -2,7 +2,8 @@ require File.join(File.dirname(__FILE__), "..", "revolve")
 
 class Integer
   def protected_division(divisor)
-    self / divisor rescue 1
+    return 1 if divisor == 0
+    self / divisor
   end
 end
 
@@ -18,15 +19,15 @@ end
 # x**2 + x + 1
 population = Revolve::Population.initialized( 200, {  
   :size_limit => 20,
-  :instructions => [ 1, 2, 3, 4, 5, 6, 7, 8, 9,
+  :instructions => [ Revolve::ERK.new(-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5),
                      Revolve::Method.new(:+), Revolve::Method.new(:-), 
                      Revolve::Method.new(:*), Revolve::Method.new(:protected_division),
                      Revolve::Variable.new(:x) ],
   :generations_limit => 500,                    
   :fitness_cases => cases(6, 1),
   :error_function => lambda{|cases| cases.inject{|x, y| x.abs + y.abs } },
-  :elitism_percent => 0.4,
-  :crossover_percent => 0.5,
+  :elitism_percent => 0.35,
+  :crossover_percent => 0.45,
   :mutation_percent => 0.1
 })
 
