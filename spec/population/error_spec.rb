@@ -4,16 +4,14 @@ module Revolve
   
   describe Population, "#error" do
     before do
-      @error_function = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
-      @population = new_population(
-        :size => 1,
-        :fitness_cases => [ lambda{|program| program.run - 12 } ],
-        :error_function => @error_function)
-      @program = Program.new(2, 8, Revolve::Method.new(:+))
-      @population[0] = @program
+      fitness_cases = [lambda {|program| program.run.to_i - 10 }]    
+      error_function = lambda{|cases| cases.first.abs }
+      @population = new_population(:size => 0, :fitness_cases => fitness_cases, :error_function => error_function)
+      @program = Program.new(8)
+      @population.push @program
     end
     
-    it "should be the fitness_cases mapped to the program, applied to the error_function" do
+    it "should be the fitness_cases passed the program, applied to the error_function" do
       @population.error(@program).should == 2
     end
     
@@ -25,8 +23,8 @@ module Revolve
 
     it "should not returned memoized results for separate programs" do
       @population.error(@program)
-      another_program = Program.new(2, 3, Revolve::Method.new(:+))      
-      @population.push(another_program).error(another_program).should == 7
+      another_program = Program.new(5)      
+      @population.push(another_program).error(another_program).should == 5
     end
   end
   

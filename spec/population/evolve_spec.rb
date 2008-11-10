@@ -4,22 +4,19 @@ module Revolve
   
 describe Population, "#evolve!" do
   before do
-    @error_function = lambda{|cases| cases.map{|x| x.abs}.inject{|x, y| x + y } }
+    error_function = lambda{|cases| cases.inject{|x, y| x.abs + y.abs } }
     @population = new_population(
-      :size => 0,
-      :generations_limit => 5,
-      :instructions => [2, 3, 5, 8, 1337, 
+      :size => 7,
+      :size_limit => 10,
+      :generations_limit => 2,
+      :instructions => [1, 2, 3,
                         Revolve::Method.new(:+), Revolve::Method.new(:next), Revolve::Method.new(:*)],
       :fitness_cases => [ lambda{|program| program.run.to_i - 12 } ],
-      :error_function => @error_function,
+      :error_function => error_function,
+      :elitism_percent => 0.4,
       :crossover_percent => 0.5,
-      :mutation_percent => 0.25)
-    @program_1 = Program.new(2, 8, Revolve::Method.new(:+))
-    @program_2 = Program.new(1336, Revolve::Method.new(:next))
-    @program_3 = Program.new(2, 3, Revolve::Method.new(:+))
-    @program_4 = Program.new(3, 5, Revolve::Method.new(:*))
-    @population.push(@program_1).push(@program_2).push(@program_3).push(@program_4)
-    @original_population = @population.clone    
+      :mutation_percent => 0.1)
+    @original_population = @population.dup    
   end
   
   it "should return a program" do
@@ -28,7 +25,7 @@ describe Population, "#evolve!" do
   
   it "should not evolve past generations_limit" do
     @population.evolve!
-    @population.generation.should_not > 5
+    @population.generation.should_not > 3
   end
   
   it "should be the same size as it was originally" do
@@ -36,7 +33,7 @@ describe Population, "#evolve!" do
     @population.size.should == @original_population.size
   end
   
-  it "should not be a different population" do
+  it "should be a different population" do
     @population.evolve!
     @population.should_not == @original_population
   end
